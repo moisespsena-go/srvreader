@@ -40,12 +40,14 @@ func parseAddr(address string) (network, addr string) {
 }
 
 func IsProto(address, proto string) bool {
-	pos := strings.IndexRune(address, ':')
-	for unicode.IsDigit(rune(address[pos-1])) {
-		pos--
+	if pos := strings.IndexRune(address, ':'); pos != -1 {
+		for unicode.IsDigit(rune(address[pos-1])) {
+			pos--
+		}
+		part := address[0:pos]
+		return proto == part
 	}
-	part := address[0:pos]
-	return proto == part
+	return false
 }
 
 // TCPKeepAliveListener sets TCP keep-alive timeouts on accepted
